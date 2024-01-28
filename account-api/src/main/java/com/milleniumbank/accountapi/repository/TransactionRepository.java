@@ -1,7 +1,11 @@
 package com.milleniumbank.accountapi.repository;
 
-import com.milleniumbank.accountapi.entity.Transaction;
+import com.milleniumbank.accountapi.model.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface TransactionRepository extends JpaRepository<Transaction, Long> {
+import java.util.UUID;
+
+@Repository
+public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
 }

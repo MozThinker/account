@@ -1,4 +1,4 @@
-package com.milleniumbank.accountapi.endpoint;
+package com.milleniumbank.accountapi.controller;
 
 import com.milleniumbank.accountapi.dto.CustomerDto;
 import org.springframework.http.HttpStatus;
