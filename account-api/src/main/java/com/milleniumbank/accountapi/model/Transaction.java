@@ -1,6 +1,7 @@
 package com.milleniumbank.accountapi.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
@@ -11,20 +12,17 @@ import java.util.Objects;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Transaction {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "transaction_id", updatable = false, nullable = false)
     private String transactionId;
 
-    @Column(nullable = false)
     private BigDecimal amount;
-
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
@@ -35,6 +33,7 @@ public class Transaction {
     private Account account;
 
     public Transaction(BigDecimal amount, LocalDateTime createdAt, TransactionType transactionType , String description, Account account) {
+        this.transactionId = null;
         this.amount = amount;
         this.createdAt = createdAt;
         this.transactionType = transactionType;

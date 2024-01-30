@@ -1,25 +1,20 @@
 package com.milleniumbank.accountapi.dto;
 
-import lombok.Data;
+import com.milleniumbank.accountapi.model.AccountType;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AccountDto {
     private Long accountId;
-
-    private String accountNumber;
-
     private BigDecimal balance;
-
-    private String type;
-
+    private AccountType accountType;
     private LocalDateTime createdAt;
-
-    private Long ownerId;
-
-    private List<TransactionDto> transactions = new ArrayList<>();
+    private AccountCustomerDto owner;
+    private List<TransactionDto> transactions;
 }

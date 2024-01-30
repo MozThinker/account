@@ -1,25 +1,23 @@
 package com.milleniumbank.accountapi.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-
-@Getter
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Customer {
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "customer_id", updatable = false, nullable = false)
-    private String customerId;
 
-    @Column(nullable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false, nullable = false, unique = true)
+    private Long customerId;
+
     private String name;
 
     private String surname;
@@ -29,15 +27,17 @@ public class Customer {
     private String phone;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
-    private final Set<Account> accounts = new HashSet<>();
+    private Set<Account> accounts;
 
     public Customer(String name, String surname, String email, String phone) {
-
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.phone = phone;
+        this.accounts = null;
     }
+
+
 
     @Override
     public boolean equals(Object o) {
@@ -50,11 +50,12 @@ public class Customer {
                 Objects.equals(name, customer.name) &&
                 Objects.equals(surname, customer.surname) &&
                 Objects.equals(email, customer.email) &&
-                Objects.equals(phone, customer.phone);
+                Objects.equals(phone, customer.phone) &&
+                Objects.equals(accounts, customer.accounts);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(customerId, name, surname, email, phone);
+        return Objects.hash(customerId, name, surname, email, phone, accounts);
     }
 }

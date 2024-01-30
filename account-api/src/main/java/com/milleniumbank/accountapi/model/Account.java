@@ -4,13 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @NoArgsConstructor
@@ -18,38 +15,28 @@ import java.util.Set;
 @Entity
 public class Account {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(updatable = false, nullable = false)
-    private String accountId;
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false, unique = true)
-    private Long accountNumber;
-
-    @Column(nullable = false)
+    private Long accountId;
     private BigDecimal balance = BigDecimal.ZERO;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
 
-    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer owner;
 
-    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private final Set<Transaction> transactions = new HashSet<>();
+    @OneToMany(mappedBy = "account",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Transaction> transactions = new ArrayList<>();
 
-    public Account(Long accountNumber, BigDecimal balance, AccountType accountType, LocalDateTime createdAt, Customer owner) {
-        this.accountNumber = accountNumber;
+    public Account(Customer owner, BigDecimal balance, AccountType accountType, LocalDateTime createdAt) {
+        this.owner = owner;
         this.balance = balance;
         this.accountType = accountType;
         this.createdAt = createdAt;
-        this.owner = owner;
     }
 
     @Override
@@ -60,15 +47,14 @@ public class Account {
         Account account = (Account) o;
 
         return Objects.equals(accountId, account.accountId) &&
-                Objects.equals(accountNumber, account.accountNumber) &&
+                Objects.equals(owner, account.owner) &&
                 Objects.equals(balance, account.balance) &&
                 accountType == account.accountType &&
-                Objects.equals(createdAt, account.createdAt) &&
-                Objects.equals(owner, account.owner);
+                Objects.equals(createdAt, account.createdAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, accountNumber, balance, accountType, createdAt, owner);
+        return Objects.hash(accountId, owner, balance, accountType, createdAt );
     }
 }
