@@ -55,3 +55,27 @@ jobs:
         run: |
           cd account-api/
           mvn -B test --file pom.xml
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main')
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v3
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'zulu'
+      - run: |
+         cd account-api/
+         mvn --batch-mode --update-snapshots verify
+         mkdir staging && cp target/*.jar staging
+      - name: Upload artifact to GitHub
+        uses: actions/upload-artifact@v4
+        with:
+          name: Package
+          path: staging
+
+
+

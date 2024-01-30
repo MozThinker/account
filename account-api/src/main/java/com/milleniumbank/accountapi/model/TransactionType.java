@@ -1,0 +1,19 @@
+package com.milleniumbank.accountapi.model;
+
+public enum TransactionType {
+    INITIAL,
+    DEPOSIT,
+    WITHDRAWAL,
+    TRANSFER,
+    INTEREST,
+    FEE,
+    ADJUSTMENT,
+    REVERSAL,
+    REVERSAL_OF_REVERSAL,
+    REVERSAL_OF_ADJUSTMENT,
+    REVERSAL_OF_FEE,
+    REVERSAL_OF_INTEREST,
+    REVERSAL_OF_TRANSFER,
+    REVERSAL_OF_WITHDRAWAL,
+    REVERSAL_OF_DEPOSIT
+}
